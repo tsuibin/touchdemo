@@ -9,6 +9,18 @@
 #include <QPushButton>
 #include <QMap>
 #include <QtCore>
+#include <QString>
+#include <QStringList>
+#include <QKeyEvent>
+#include <QImage>
+#include <QMessageBox>
+#include <QEvent>
+#include <QTouchEvent>
+#include <QGraphicsBlurEffect>
+#include <QBitmap>
+
+
+
 
 
 #include "appenv.h"
@@ -17,7 +29,7 @@
 #include "topmenu.h"
 #include "touchdemo.h"
 #include "imglabel.h"
-
+#include "filtermenu.h"
 
 
 #endif // COMMON_H

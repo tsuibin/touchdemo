@@ -2,14 +2,7 @@
 #define GIRDVIEW_H
 
 #include <QWidget>
-#include <QDebug>
-#include <QDir>
-#include <QFileInfoList>
-#include <QMessageBox>
-#include <QLabel>
-#include <QPushButton>
-#include <QMap>
-#include <QtCore>
+#include "common.h"
 
 namespace Ui {
 class GirdView;
@@ -45,8 +38,9 @@ private:
 
     QStringList m_imgList;
     int m_imgCount;
-    int m_currentPage;
     QMap<int, ImgLabel*> m_imgLabelmap;
+
+    void initPage(int page);
 };
 
 #endif // GIRDVIEW_H

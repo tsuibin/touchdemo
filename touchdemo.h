@@ -2,13 +2,8 @@
 #define TOUCHDEMO_H
 
 #include <QWidget>
-#include <QStringList>
-#include <QDir>
-#include <QKeyEvent>
-#include <QImage>
-#include <QMessageBox>
-#include <QEvent>
-#include <QTouchEvent>
+#include "common.h"
+
 
 namespace Ui {
 class TouchDemo;
@@ -18,6 +13,7 @@ class TouchDemo;
 class TopMenu;
 class GridView;
 class Preview;
+class FilterMenu;
 
 class TouchDemo : public QWidget
 {
@@ -36,7 +32,8 @@ private slots:
     void previousPage();
     void nextPage();
     void returnCurrentPage();
-
+    void moveNextPage();
+    void movePrevPage();
 
 protected:
     void keyPressEvent ( QKeyEvent * event );
@@ -53,7 +50,12 @@ private:
     TopMenu *m_topMenu;
     GridView *m_gridView;
     Preview *m_preview;
+
+
     QList<QTouchEvent::TouchPoint> m_touchPoints;
+    QTimer *m_nextPageTimer;
+    QTimer *m_prevPageTimer;
+    QTimer *m_currentPageTimer;
 
     int m_mouseOldPosX;
     int m_movingDistance;

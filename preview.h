@@ -1,15 +1,17 @@
 #ifndef PREVIEW_H
 #define PREVIEW_H
 
+#include "common.h"
 #include <QWidget>
-#include <QMessageBox>
-#include <QDebug>
+
 
 
 
 namespace Ui {
 class Preview;
 }
+
+class FilterMenu;
 
 class Preview : public QWidget
 {
@@ -39,6 +41,10 @@ private:
     qreal totalScaleFactor;
     QPixmap m_currentImgPixmap;
     qreal m_scaled;
+
+    FilterMenu *m_filterMenu;
+
+    void resetFilterMenu();
 };
 
 #endif // PREVIEW_H

@@ -1,11 +1,6 @@
 #include "touchdemo.h"
 #include "ui_touchdemo.h"
 
-#include "topmenu.h"
-#include "gridview.h"
-#include "preview.h"
-#include "imglabel.h"
-#include "appenv.h"
 
 
 #define PREVIOUS_PAGE   1
@@ -39,6 +34,9 @@ QWidget(parent), ui(new Ui::TouchDemo)
 	m_topMenu = new TopMenu(this);
 	m_topMenu->show();
 
+
+
+
     connect(m_gridView, SIGNAL(imgClicked()), m_preview, SLOT(test()));
     connect(m_gridView, SIGNAL(imgClicked()), m_preview, SLOT(show()));
 
@@ -50,6 +48,20 @@ QWidget(parent), ui(new Ui::TouchDemo)
 	connect(this, SIGNAL(pressESC()), m_preview, SLOT(hide()));
     connect(this, SIGNAL(pressESC()), m_gridView, SLOT(show()));
 
+    m_nextPageTimer = new QTimer(this);
+    connect(m_nextPageTimer,SIGNAL(timeout()),this,SLOT(moveNextPage()));
+
+    m_prevPageTimer = new QTimer(this);
+    connect(m_prevPageTimer,SIGNAL(timeout()),this,SLOT(movePrevPage()));
+
+    m_currentPageTimer = new QTimer(this);
+    connect(m_currentPageTimer,SIGNAL(timeout()),this,SLOT(returnCurrentPage()));
+
+    qDebug() << "总页数" << AppEnv::pageCount;
+
+    m_movingDistance = 0;
+
+
 }
 
 TouchDemo::~TouchDemo()
@@ -59,28 +71,88 @@ TouchDemo::~TouchDemo()
 	delete ui;
 }
 
+
+
 void TouchDemo::previousPage()
 {
-    qDebug() << __func__;
+    qDebug() <<"上一页";
+    if (AppEnv::currentPage == 0)
+    {
+        qDebug() <<"当前是第一页";
+        returnCurrentPage();
+        return;
+    }
+
     if(m_gridView->isVisible())
     {
-        m_gridView->prevPage();
-
+        m_prevPageTimer->start(10);
     }
+
 }
 void TouchDemo::nextPage()
 {
-	qDebug() << __func__;
+
+
+    if (AppEnv::currentPage+1 >= AppEnv::pageCount)
+    {
+        returnCurrentPage();
+        return;
+    }
     if(m_gridView->isVisible())
     {
-        qDebug() << "can do next";
-        m_gridView->nextPage();
-
+        m_nextPageTimer->start(10);
     }
 }
 
+void TouchDemo::movePrevPage()
+{
+
+    int x = -1280*(AppEnv::currentPage - 1 );
+    if(m_gridView->x() < x)
+    {
+        m_gridView->move(m_gridView->x()+50,0);
+    }else{
+        m_gridView->move( x, 0);
+        AppEnv::currentPage--;
+        m_prevPageTimer->stop();
+    }
+
+}
+
+void TouchDemo::moveNextPage()
+{
+    int x = -1280*(AppEnv::currentPage + 1 );
+
+    if(m_gridView->x() > x )
+    {
+        m_gridView->move(m_gridView->x()-50,0);
+
+    }else{
+        m_gridView->move( x, 0);
+        AppEnv::currentPage++;
+        m_nextPageTimer->stop();
+    }
+
+}
+
+
 void TouchDemo::returnCurrentPage()
 {
+    int x = 1280*(AppEnv::currentPage + 1 );
+
+    qDebug() << m_gridView->x()  <<  x;
+    if (m_gridView->x() != x)
+    {
+        m_gridView->move(m_gridView->x() - m_movingDistance, 0);
+
+    }else{
+        m_gridView->move(x, 0);
+        m_currentPageTimer->stop();
+    }
+
+
+
+    return;
 
 
 }
@@ -92,7 +164,7 @@ void TouchDemo::touchBegin(QEvent * event)
     if (m_touchPoints.count() == 2)
     {
         const QTouchEvent::TouchPoint &touchPoint0 = m_touchPoints.first();
-        const QTouchEvent::TouchPoint &touchPoint1 = m_touchPoints.last();
+       // const QTouchEvent::TouchPoint &touchPoint1 = m_touchPoints.last();
 
         qDebug() <<"2 touch press";
         qDebug() << touchPoint0.pos();
@@ -118,9 +190,10 @@ void TouchDemo::mouseMoveEvent ( QMouseEvent * event )
 
     m_movingDistance += x;
     m_mouseOldPosX = event->x();
-
-    m_gridView->move(m_gridView->x()+x,m_gridView->y());
-
+    if(m_gridView->isVisible())
+    {
+        m_gridView->move(m_gridView->x()+x,m_gridView->y());
+    }
 
 }
 
@@ -140,7 +213,9 @@ void TouchDemo::mouseReleaseEvent ( QMouseEvent * event )
 {
 
     qDebug() << "mouseOldPosX" <<m_mouseOldPosX
-             <<"movingDistance"<<m_movingDistance;
+             <<"movingDistance"<<m_movingDistance
+            << "m_gridView" << m_gridView->x();
+
 
     pageDirection = 0;
     if (m_movingDistance > 200)
@@ -152,16 +227,10 @@ void TouchDemo::mouseReleaseEvent ( QMouseEvent * event )
         pageDirection = -1;
     }
 
-    /*
-渲染3页 [0] 1 2
-默认显示 [0]
-向下翻页 将1 移动到当前位置 渲染2 //0 [1] 2
-向下翻页 将2 移动到当前位置 渲染3 释放0// 1 [2] 3
-*/
-//    if(m_gridView->isVisible())
-//    {
-//        automaticPage(pageDirection);
-//    }
+    if(m_gridView->isVisible())
+    {
+        automaticPage(pageDirection);
+    }
 
 
     if(m_preview->isVisible())
@@ -203,12 +272,18 @@ void TouchDemo::keyPressEvent(QKeyEvent * event)
 		break;
     case Qt::Key_PageUp:
         qDebug() << "prev";
-        previousPage();
+        if(!m_prevPageTimer->isActive() && !m_nextPageTimer->isActive())
+        {
+            previousPage();
+        }
         break;
 
     case Qt::Key_PageDown:
         qDebug() << "down";
-        nextPage();
+        if(!m_prevPageTimer->isActive() && !m_nextPageTimer->isActive())
+        {
+            nextPage();
+        }
         break;
     case Qt::Key_R:
         m_preview->rotate(90);

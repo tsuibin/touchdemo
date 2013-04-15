@@ -1,9 +1,7 @@
 #ifndef APPENV_H
 #define APPENV_H
 
-#include <QString>
-#include <QDir>
-#include <QDebug>
+#include "common.h"
 
 class AppEnv
 {
@@ -16,6 +14,8 @@ public:
     static QString imgPath;
     static int currentImageIndex;
     static int imgCount;
+    static int currentPage;
+    static int pageCount;
 };
 
 #endif // APPENV_H

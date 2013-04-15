@@ -15,6 +15,8 @@ QWidget(parent), ui(new Ui::Preview)
 	m_imageLabel->resize(1280, 752);
     totalScaleFactor = 1;
 
+    m_filterMenu = new FilterMenu(this);
+    m_filterMenu->move(0, 725);
 
 
 
@@ -26,8 +28,13 @@ Preview::~Preview()
 	delete ui;
 }
 
-void
- Preview::setImagePath(QString path)
+void Preview::resetFilterMenu()
+{
+    qDebug() <<"img" << AppEnv::currentImg;
+    m_filterMenu->initFilterItem();
+
+}
+void Preview::setImagePath(QString path)
 {
 	m_imgPath = path;
 
@@ -46,6 +53,7 @@ void Preview::rotate( qreal angle )
 void Preview::test()
 {
 
+
 	qDebug() << AppEnv::currentImg;
 	QString fileName = AppEnv::currentImg;
 	QImage image(fileName);
@@ -59,6 +67,10 @@ void Preview::test()
     m_currentImgPixmap = QPixmap::fromImage(image).scaled(1280, 752);
     m_imageLabel->setPixmap(m_currentImgPixmap);
 	m_imageLabel->move(0, 48);
+
+
+    resetFilterMenu();
+
 
 
 }
@@ -77,7 +89,7 @@ void Preview::nextImage()
 	QString fileName =
         AppEnv::imgPath + AppEnv::imgList.at(no);
 
-	qDebug() << fileName;
+    AppEnv::currentImg = fileName;
 
 	QImage image(fileName);
 
@@ -90,6 +102,7 @@ void Preview::nextImage()
     m_imageLabel->setPixmap(m_currentImgPixmap);
 	m_imageLabel->move(0, 48);
     totalScaleFactor = 1;
+    resetFilterMenu();
 
 }
 
@@ -107,7 +120,7 @@ void Preview::prevImage()
 	QString fileName =
         AppEnv::imgPath + AppEnv::imgList.at(AppEnv::currentImageIndex);
 
-	qDebug() << fileName;
+    AppEnv::currentImg = fileName;
 
 	QImage image(fileName);
 
@@ -121,6 +134,8 @@ void Preview::prevImage()
     m_imageLabel->setPixmap(m_currentImgPixmap);
 	m_imageLabel->move(0, 48);
     totalScaleFactor = 1;
+    resetFilterMenu();
+
 }
 
 
