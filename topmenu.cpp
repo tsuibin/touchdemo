@@ -13,10 +13,23 @@ QWidget(parent), ui(new Ui::TopMenu)
 	ui->label->setPixmap(QPixmap(picPath));
 
 	QString editPicPath = "images/edit.png";
-	ui->label_edit->setPixmap(QPixmap(editPicPath));
+    ImgLabel *label_edit = new ImgLabel(this);
+    label_edit->move(1212, 0);
+    label_edit->setPixmap(QPixmap(editPicPath));
+    label_edit->m_activeImg = "images/edit_active.jpg";
+    label_edit->m_normalImg = "images/edit.png";
+
+
 
 	QString createPicPath = "images/create.png";
-	ui->label_create->setPixmap(QPixmap(createPicPath));
+    ImgLabel *label_cre = new ImgLabel(this);
+    label_cre->move(1144, 0);
+    label_cre->setPixmap(QPixmap(createPicPath));
+    label_cre->m_activeImg = "images/create_active.png";
+    label_cre->m_normalImg = "images/create.png";
+
+
+
 
 	QString retPicPath = "images/ret.png";
 
