@@ -29,6 +29,10 @@ public slots:
     void prevImage();
     void rotate( qreal angle );
 
+    void blurEffectSlot();
+    void colorizeEffectSlot();
+    void dropShadowEffectSlot();
+    void colorizeEffectSlot1();
 protected:
 
     bool event ( QEvent * event );
@@ -43,6 +47,11 @@ private:
     qreal m_scaled;
 
     FilterMenu *m_filterMenu;
+
+
+
+
+
 
     void resetFilterMenu();
 };

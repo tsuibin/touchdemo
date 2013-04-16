@@ -18,15 +18,46 @@ QWidget(parent), ui(new Ui::Preview)
     m_filterMenu = new FilterMenu(this);
     m_filterMenu->move(0, 725);
 
-
-
-
+    connect(m_filterMenu,SIGNAL(blurEffect()),this,SLOT(blurEffectSlot()));
+    connect(m_filterMenu,SIGNAL(colorizeEffect()),this,SLOT(colorizeEffectSlot()));
+    connect(m_filterMenu,SIGNAL(dropShadowEffect()),this,SLOT(dropShadowEffectSlot()));
+    connect(m_filterMenu,SIGNAL(colorizeEffect1()),this,SLOT(colorizeEffectSlot1()));
 }
 
 Preview::~Preview()
 {
 	delete ui;
 }
+
+void Preview::blurEffectSlot()
+{
+    QGraphicsBlurEffect *m_effect0 = new QGraphicsBlurEffect();
+    m_effect0->setBlurRadius(0.2);
+    m_imageLabel->setGraphicsEffect(m_effect0);
+}
+
+void Preview::colorizeEffectSlot()
+{
+    qDebug() <<"sle";
+    QGraphicsColorizeEffect *m_effect1 = new QGraphicsColorizeEffect();
+    m_effect1->setColor(QColor(0,0,192));
+    m_imageLabel->setGraphicsEffect(m_effect1);// setGraphicsEffect will free effect space automatic
+}
+
+void Preview::colorizeEffectSlot1()
+{
+    QGraphicsColorizeEffect *m_effect3 = new QGraphicsColorizeEffect();
+    m_effect3->setColor(QColor(192,0,0));
+    m_imageLabel->setGraphicsEffect(m_effect3);
+}
+
+void Preview::dropShadowEffectSlot()
+{
+    QGraphicsDropShadowEffect *m_effect2 = new QGraphicsDropShadowEffect();
+    m_effect2->setOffset(8,8);
+    m_imageLabel->setGraphicsEffect(m_effect2);
+}
+
 
 void Preview::resetFilterMenu()
 {

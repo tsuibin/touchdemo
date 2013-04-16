@@ -16,9 +16,22 @@ public:
     explicit FilterMenu(QWidget *parent = 0);
     ~FilterMenu();
     void initFilterItem();
-    
+
+signals:
+    void blurEffect();
+    void colorizeEffect();
+    void dropShadowEffect();
+    void colorizeEffect1();
+
+
 private slots:
     void on_pushButton_clicked();
+    void blurEffectSlot();
+    void colorizeEffectSlot();
+    void dropShadowEffectSlot();
+    void colorizeEffectSlot1();
+
+
 
 private:
     Ui::FilterMenu *ui;

@@ -23,6 +23,10 @@ QWidget(parent), ui(new Ui::FilterMenu)
     m_effect3->setColor(QColor(192,0,0));
 
 
+    connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(blurEffectSlot()));
+    connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(colorizeEffectSlot()));
+    connect(ui->pushButton_3,SIGNAL(clicked()),this,SLOT(dropShadowEffectSlot()));
+    connect(ui->pushButton_4,SIGNAL(clicked()),this,SLOT(colorizeEffectSlot1()));
 
 }
 
@@ -72,4 +76,25 @@ void FilterMenu::initFilterItem()
 
     delete m_ico;
     delete pm;
+}
+
+
+void FilterMenu::blurEffectSlot()
+{
+    emit blurEffect();
+}
+void FilterMenu::colorizeEffectSlot()
+{
+
+    emit colorizeEffect();
+
+}
+void FilterMenu::dropShadowEffectSlot()
+{
+
+     emit dropShadowEffect();
+}
+void FilterMenu::colorizeEffectSlot1()
+{
+    emit colorizeEffect1();
 }

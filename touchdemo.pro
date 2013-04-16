@@ -74,3 +74,6 @@ OTHER_FILES += \
     images/2x.png \
     images/1x-2.png \
     images/1x.png
+
+OTHER_FILES += \
+    .gitignore
