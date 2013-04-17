@@ -13,6 +13,7 @@ class TouchDemo;
 class TopMenu;
 class GridView;
 class Preview;
+class RandomView;
 class FilterMenu;
 
 class TouchDemo : public QWidget
@@ -50,6 +51,7 @@ private:
     TopMenu *m_topMenu;
     GridView *m_gridView;
     Preview *m_preview;
+    RandomView *m_randomView;
 
 
     QList<QTouchEvent::TouchPoint> m_touchPoints;

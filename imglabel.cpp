@@ -94,10 +94,7 @@ void ImgLabel::setImgPath(QString path)
 	this->m_imgPath = path;
 }
 
-//bool ImgLabel::event( QEvent * event )
-//{
-//    QWidget::event(event);
-//}
+
 void ImgLabel::test()
 {
 

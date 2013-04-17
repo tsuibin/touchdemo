@@ -18,6 +18,7 @@
 #include <QTouchEvent>
 #include <QGraphicsBlurEffect>
 #include <QBitmap>
+#include <QTime>
 
 
 
@@ -30,6 +31,7 @@
 #include "touchdemo.h"
 #include "imglabel.h"
 #include "filtermenu.h"
+#include "randomview.h"
 
 
 #endif // COMMON_H

@@ -28,11 +28,18 @@ QWidget(parent), ui(new Ui::TouchDemo)
 	m_preview = new Preview(this);
     m_preview->hide();
 
+    m_randomView = new RandomView(this);
+    m_randomView->show();
+
     m_gridView = new GridView(this);
-    m_gridView->show();
+    m_gridView->hide();
 
 	m_topMenu = new TopMenu(this);
 	m_topMenu->show();
+
+
+
+
 
 
 
@@ -75,6 +82,9 @@ TouchDemo::~TouchDemo()
 
 void TouchDemo::previousPage()
 {
+
+
+
     qDebug() <<"上一页";
     if (AppEnv::currentPage == 0)
     {
