@@ -40,7 +40,6 @@ QWidget(parent), ui(new Ui::RandomView)
 
 
     for (int i = page*12; i < max; i++) {
-         qDebug() << qrand()%1000;
 
             QPixmap tmp =
                 QPixmap(t.at(i).absoluteFilePath()).scaled(290, 197);
@@ -100,7 +99,6 @@ void RandomView::imgClickSlot()
         }
         m_currentLabel->setPixmap( QPixmap::fromImage(image).scaled(w, h));
         m_currentLabel->resize(w,h);
-
     }
 
     w = 290 * 2;

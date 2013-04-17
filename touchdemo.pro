@@ -54,8 +54,6 @@ OTHER_FILES += \
     images/random.png \
     images/random.jpg \
     images/menu_bg.jpg \
-    images/gird_active.png \
-    images/gird.png \
     images/filter_active.png \
     images/filter.png \
     images/edit_active.jpg \
@@ -73,7 +71,9 @@ OTHER_FILES += \
     images/2x-2.png \
     images/2x.png \
     images/1x-2.png \
-    images/1x.png
+    images/1x.png \
+    images/grid.png \
+    images/grid_active.png
 
 OTHER_FILES += \
     .gitignore

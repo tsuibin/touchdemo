@@ -29,10 +29,10 @@ QWidget(parent), ui(new Ui::TouchDemo)
     m_preview->hide();
 
     m_randomView = new RandomView(this);
-    m_randomView->show();
+    m_randomView->hide();
 
     m_gridView = new GridView(this);
-    m_gridView->hide();
+    m_gridView->show();
 
 	m_topMenu = new TopMenu(this);
 	m_topMenu->show();
@@ -40,6 +40,15 @@ QWidget(parent), ui(new Ui::TouchDemo)
 
 
 
+
+    connect(m_topMenu, SIGNAL(randomSignal()), m_randomView, SLOT(show()));
+    connect(m_topMenu, SIGNAL(randomSignal()), m_preview, SLOT(hide()));
+    connect(m_topMenu, SIGNAL(randomSignal()), m_gridView, SLOT(hide()));
+
+
+    connect(m_topMenu, SIGNAL(gridSignal()), m_gridView, SLOT(show()));
+    connect(m_topMenu, SIGNAL(gridSignal()), m_preview, SLOT(hide()));
+    connect(m_topMenu, SIGNAL(gridSignal()), m_randomView, SLOT(hide()));
 
 
 
@@ -49,11 +58,15 @@ QWidget(parent), ui(new Ui::TouchDemo)
 
     connect(m_gridView, SIGNAL(imgClicked()), m_gridView, SLOT(hide()));
 
-    connect(m_topMenu, SIGNAL(retSignal()), m_gridView, SLOT(show()));
-	connect(m_topMenu, SIGNAL(retSignal()), m_preview, SLOT(hide()));
 
-	connect(this, SIGNAL(pressESC()), m_preview, SLOT(hide()));
+    connect(m_topMenu, SIGNAL(retSignal()), m_gridView, SLOT(show()));
+    connect(m_topMenu, SIGNAL(retSignal()), m_preview, SLOT(hide()));
+    connect(m_topMenu, SIGNAL(retSignal()), m_randomView, SLOT(hide()));
+
+
     connect(this, SIGNAL(pressESC()), m_gridView, SLOT(show()));
+    connect(this, SIGNAL(pressESC()), m_randomView, SLOT(hide()));
+    connect(this, SIGNAL(pressESC()), m_preview, SLOT(hide()));
 
     m_nextPageTimer = new QTimer(this);
     connect(m_nextPageTimer,SIGNAL(timeout()),this,SLOT(moveNextPage()));

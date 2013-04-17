@@ -65,7 +65,7 @@ font: 75 24pt &quot;微软雅黑&quot;;</string>
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_create">
+  <widget class="QLabel" name="label_view">
    <property name="geometry">
     <rect>
      <x>1144</x>

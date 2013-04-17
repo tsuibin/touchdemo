@@ -21,6 +21,8 @@ public:
 signals:
     void testImg();
     void retSignal();
+    void gridSignal();
+    void randomSignal();
 
 private slots:
 
