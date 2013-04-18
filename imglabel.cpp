@@ -9,10 +9,14 @@ QString AppEnv::currentImg;
 QLabel(parent)
 {
 
+
+
+
     setAttribute(Qt::WA_AcceptTouchEvents);
 	m_activeImg = "";
 	m_normalImg = "";
     m_preview = false;
+    m_angle = 0;
 
 
 }

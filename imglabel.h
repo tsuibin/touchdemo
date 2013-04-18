@@ -52,7 +52,10 @@ public:
     int m_index;
     QString m_activeImg;
     QString m_normalImg;
-    
+    qreal m_angle;
+    int m_width;
+    int m_heigh;
+
 signals:
     void clicked();
     void pressed();
@@ -75,6 +78,7 @@ private:
     int m_movingDistance;
     int pageDirection;
     bool m_preview;
+
 
 
     

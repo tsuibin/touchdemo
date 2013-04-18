@@ -23,11 +23,17 @@ protected:
     void mouseMoveEvent ( QMouseEvent * event ) ;
     void mousePressEvent ( QMouseEvent * event );
     void mouseReleaseEvent ( QMouseEvent * event );
+    bool event( QEvent * event );
+    void wheelEvent(QWheelEvent *event);
 
 private:
     Ui::RandomView *ui;
     ImgLabel *m_currentLabel;
     QPoint m_mousePos;
+    QPixmap m_currentImgPixmap;
+    qreal m_angle;
+    qreal totalScaleFactor;
+    qreal m_scaled;
 };
 
 #endif // RANDOMVIEW_H

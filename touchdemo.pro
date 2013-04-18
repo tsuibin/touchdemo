@@ -73,7 +73,8 @@ OTHER_FILES += \
     images/1x-2.png \
     images/1x.png \
     images/grid.png \
-    images/grid_active.png
+    images/grid_active.png \
+    note.txt
 
 OTHER_FILES += \
     .gitignore

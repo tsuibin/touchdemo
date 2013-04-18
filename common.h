@@ -19,6 +19,7 @@
 #include <QGraphicsBlurEffect>
 #include <QBitmap>
 #include <QTime>
+#include <QMatrix>
 
 
 

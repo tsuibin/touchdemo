@@ -189,7 +189,7 @@ void TouchDemo::touchBegin(QEvent * event)
         const QTouchEvent::TouchPoint &touchPoint0 = m_touchPoints.first();
        // const QTouchEvent::TouchPoint &touchPoint1 = m_touchPoints.last();
 
-        qDebug() <<"2 touch press";
+
         qDebug() << touchPoint0.pos();
     }
 
@@ -209,7 +209,6 @@ void TouchDemo::mouseMoveEvent ( QMouseEvent * event )
 
     }
     int x = event->x() - m_mouseOldPosX;
-   // qDebug() << "event->x()" << event->x() << "m_mouseOldPosX" << m_mouseOldPosX <<"x" << x;
 
     m_movingDistance += x;
     m_mouseOldPosX = event->x();
@@ -227,17 +226,11 @@ void TouchDemo::mousePressEvent ( QMouseEvent * event )
     m_movingDistance = 0;
     m_mouseOldPosX = event->x();
 
-    qDebug() << "press" << m_mouseOldPosX <<"event->x()" << event->x();
-
 
 }
 
 void TouchDemo::mouseReleaseEvent ( QMouseEvent * event )
 {
-
-    qDebug() << "mouseOldPosX" <<m_mouseOldPosX
-             <<"movingDistance"<<m_movingDistance
-            << "m_gridView" << m_gridView->x();
 
 
     pageDirection = 0;
