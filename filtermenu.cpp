@@ -22,6 +22,10 @@ QWidget(parent), ui(new Ui::FilterMenu)
     m_effect3 = new QGraphicsColorizeEffect(this);
     m_effect3->setColor(QColor(192,0,0));
 
+    ui->pushButton->setAttribute(Qt::WA_AcceptTouchEvents);
+    ui->pushButton_2->setAttribute(Qt::WA_AcceptTouchEvents);
+    ui->pushButton_3->setAttribute(Qt::WA_AcceptTouchEvents);
+    ui->pushButton_4->setAttribute(Qt::WA_AcceptTouchEvents);
 
     connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(blurEffectSlot()));
     connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(colorizeEffectSlot()));
@@ -37,7 +41,7 @@ FilterMenu::~FilterMenu()
 
 void FilterMenu::on_pushButton_clicked()
 {
-    qDebug() <<"";
+
 
 }
 
@@ -45,7 +49,7 @@ void FilterMenu::initFilterItem()
 {
 
 
-    qDebug() <<"init filter item!";
+
     QPixmap *pm = new QPixmap( AppEnv::currentImg );
 
     bm = pm->mask();

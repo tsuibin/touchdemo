@@ -38,7 +38,7 @@ void Preview::blurEffectSlot()
 
 void Preview::colorizeEffectSlot()
 {
-    qDebug() <<"sle";
+
     QGraphicsColorizeEffect *m_effect1 = new QGraphicsColorizeEffect();
     m_effect1->setColor(QColor(0,0,192));
     m_imageLabel->setGraphicsEffect(m_effect1);// setGraphicsEffect will free effect space automatic
@@ -61,7 +61,7 @@ void Preview::dropShadowEffectSlot()
 
 void Preview::resetFilterMenu()
 {
-    qDebug() <<"img" << AppEnv::currentImg;
+
     m_filterMenu->initFilterItem();
 
 }
@@ -84,8 +84,6 @@ void Preview::rotate( qreal angle )
 void Preview::test()
 {
 
-
-	qDebug() << AppEnv::currentImg;
 	QString fileName = AppEnv::currentImg;
 	QImage image(fileName);
 
@@ -116,7 +114,7 @@ void Preview::nextImage()
     }
      AppEnv::currentImageIndex++;
     int no =  AppEnv::currentImageIndex;
-    qDebug() << "di" << no;
+
 	QString fileName =
         AppEnv::imgPath + AppEnv::imgList.at(no);
 

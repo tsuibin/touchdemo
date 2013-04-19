@@ -53,22 +53,29 @@ public:
     QString m_activeImg;
     QString m_normalImg;
     qreal m_angle;
+    qreal m_oldAngle;
     int m_width;
     int m_heigh;
+    qreal m_scaled;
 
 signals:
     void clicked();
     void pressed();
     void released();
+    void touch1Finger();
+    void touch2Finger();
+    void zoom(qreal tmp);
+    void rotate(qreal angle);
     
 public slots:
+
 
    protected:
 
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent ( QMouseEvent * event );
-   // bool event( QEvent * event );
+    bool event( QEvent * event );
 
 
 private:
@@ -78,6 +85,14 @@ private:
     int m_movingDistance;
     int pageDirection;
     bool m_preview;
+    qreal m_totalScaleFactor;
+
+    QTimer *zoom_timer;
+    QTimer *rotate_timer;
+
+    qreal m_rx;
+    qreal m_ry;
+
 
 
 

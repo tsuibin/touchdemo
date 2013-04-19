@@ -97,7 +97,7 @@ void GridView::sendImgClickSignal()
 
 	AppEnv::currentImg = label->getImgPath();
 	AppEnv::currentImageIndex = label->m_index;
-	qDebug() << "test";
+
 
 	emit imgClicked();
 }
@@ -111,19 +111,17 @@ void GridView::nextPage()
     int star = AppEnv::currentPage * 12;//3 * 12 =  36,, 4*12 = 48
     int key = 0;
 
-    qDebug() << "m_currentPage" << AppEnv::currentPage; // 3 4
-    qDebug() <<"AppEnv::imgCount" << AppEnv::imgCount; // 48
-    qDebug() << star;
+
     if(star >=  AppEnv::imgCount ){ //no
-        qDebug() <<"max";
+
         AppEnv::currentPage = qCeil(AppEnv::imgCount/12)-1;
-        qDebug() << AppEnv::imgCount/12 << qCeil(AppEnv::imgCount/12);
+
         return;
 
     }
     for(int i = star;i < AppEnv::imgCount && i < star + 12; i++)
     {
-      //  qDebug() << AppEnv::imgList.at(i);
+
 
         QPixmap tmp = QPixmap( AppEnv::imgPath + AppEnv::imgList.at(i) ).scaled(290, 197);
 
@@ -145,18 +143,15 @@ void GridView::prevPage()
     int star = AppEnv::currentPage * 12+12; // 24+12 = 36
     int key = 0;
     if(star <= 0){
-        qDebug() <<"min";
+
         AppEnv::currentPage = 0;
         return;
 
     }
 
 
-    qDebug() <<"star-12" << star-12;
-    qDebug() <<"";
     for(int i = star-12; i < star; i++)//24~36
     {
-    //    qDebug() << AppEnv::imgList.at(i);
 
         QPixmap tmp = QPixmap( AppEnv::imgPath + AppEnv::imgList.at(i) ).scaled(290, 197);
 

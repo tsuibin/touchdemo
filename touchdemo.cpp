@@ -77,7 +77,7 @@ QWidget(parent), ui(new Ui::TouchDemo)
     m_currentPageTimer = new QTimer(this);
     connect(m_currentPageTimer,SIGNAL(timeout()),this,SLOT(returnCurrentPage()));
 
-    qDebug() << "总页数" << AppEnv::pageCount;
+    //qDebug() << "总页数" << AppEnv::pageCount;
 
     m_movingDistance = 0;
 
@@ -98,10 +98,10 @@ void TouchDemo::previousPage()
 
 
 
-    qDebug() <<"上一页";
+   // qDebug() <<"上一页";
     if (AppEnv::currentPage == 0)
     {
-        qDebug() <<"当前是第一页";
+   //     qDebug() <<"当前是第一页";
         returnCurrentPage();
         return;
     }
@@ -163,7 +163,7 @@ void TouchDemo::returnCurrentPage()
 {
     int x = 1280*(AppEnv::currentPage + 1 );
 
-    qDebug() << m_gridView->x()  <<  x;
+   //qDebug() << m_gridView->x()  <<  x;
     if (m_gridView->x() != x)
     {
         m_gridView->move(m_gridView->x() - m_movingDistance, 0);
@@ -190,7 +190,7 @@ void TouchDemo::touchBegin(QEvent * event)
        // const QTouchEvent::TouchPoint &touchPoint1 = m_touchPoints.last();
 
 
-        qDebug() << touchPoint0.pos();
+    //    qDebug() << touchPoint0.pos();
     }
 
 
@@ -253,7 +253,7 @@ void TouchDemo::mouseReleaseEvent ( QMouseEvent * event )
     {
         automaticImg(pageDirection);
     }
-    qDebug() <<"+-" << pageDirection;
+ //   qDebug() <<"+-" << pageDirection;
     QWidget::mouseReleaseEvent(event);
 }
 
@@ -263,31 +263,31 @@ void TouchDemo::keyPressEvent(QKeyEvent * event)
 	switch (event->key()) {
 
 	case Qt::Key_Up:
-		qDebug() << "up";
+    //	qDebug() << "up";
 		m_preview->prevImage();
 		break;
 
 	case Qt::Key_Down:
-		qDebug() << "down";
+    //	qDebug() << "down";
 		m_preview->nextImage();
 		break;
 
 	case Qt::Key_Left:
-		qDebug() << "left";
+    //	qDebug() << "left";
 		m_preview->prevImage();
 		break;
 
 	case Qt::Key_Right:
-		qDebug() << "right";
+    //	qDebug() << "right";
 		m_preview->nextImage();
 		break;
 
 	case Qt::Key_Escape:
-		qDebug() << "esc";
+    //	qDebug() << "esc";
 		emit pressESC();
 		break;
     case Qt::Key_PageUp:
-        qDebug() << "prev";
+    //    qDebug() << "prev";
         if(!m_prevPageTimer->isActive() && !m_nextPageTimer->isActive())
         {
             previousPage();
@@ -295,7 +295,7 @@ void TouchDemo::keyPressEvent(QKeyEvent * event)
         break;
 
     case Qt::Key_PageDown:
-        qDebug() << "down";
+    //    qDebug() << "down";
         if(!m_prevPageTimer->isActive() && !m_nextPageTimer->isActive())
         {
             nextPage();
@@ -305,7 +305,7 @@ void TouchDemo::keyPressEvent(QKeyEvent * event)
         m_preview->rotate(90);
         break;
 	default:
-		qDebug() << "unknow";
+    //	qDebug() << "unknow";
 		break;
 
 	}
@@ -316,7 +316,7 @@ void TouchDemo::keyPressEvent(QKeyEvent * event)
 
 void TouchDemo::automaticImg(int direction)
 {
-    qDebug()<<"direction"<<direction;
+ //   qDebug()<<"direction"<<direction;
     switch(direction)
     {
     case 1:
@@ -338,7 +338,7 @@ void TouchDemo::automaticImg(int direction)
 
 void TouchDemo::automaticPage(int direction)
 {
-    qDebug()<<"direction"<<direction;
+//    qDebug()<<"direction"<<direction;
     switch(direction)
     {
     case 1:

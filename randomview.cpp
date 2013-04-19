@@ -4,21 +4,18 @@
  RandomView::RandomView(QWidget * parent):
 QWidget(parent), ui(new Ui::RandomView)
 {
-     qDebug();
+
     ui->setupUi(this);
-    setAttribute(Qt::WA_AcceptTouchEvents);//add touch device support
+    setAttribute(Qt::WA_AcceptTouchEvents);
 
- qsrand(QTime::currentTime().msec());
+    qsrand(QTime::currentTime().msec());
 
-    //setAttribute(Qt::WA_AcceptTouchEvents);
-
- this->setStyleSheet(QString::fromUtf8("QLabel {\n"
-                       "border-width:2px;\n"
-                       "border-style: solid;\n"
-                       "border-color: #676767;\n"
-                       " }\n" ""));
+    setAttribute(Qt::WA_AcceptTouchEvents);
 
 
+
+    totalScaleFactor = 1;
+    m_touch = false;
     int page = 0;
     QDir pdir;
     pdir.setPath(AppEnv::imgPath);
@@ -37,6 +34,8 @@ QWidget(parent), ui(new Ui::RandomView)
         max = t.size();
 
     }
+    else if (t.size() > 20)
+        max = 20;
 
 
 
@@ -69,12 +68,18 @@ QWidget(parent), ui(new Ui::RandomView)
 
             connect(label,SIGNAL(pressed()),this,SLOT(imgClickSlot()));
             connect(label,SIGNAL(released()),this,SLOT(imgReleaseSlot()));
+            connect(label,SIGNAL(touch2Finger()),this,SLOT(touch2Slot()));
+            connect(label,SIGNAL(touch1Finger()),this,SLOT(touch1Slot()));
+            connect(label,SIGNAL(zoom(qreal)),this,SLOT(zoomSlot(qreal)));
+            connect(label,SIGNAL(rotate(qreal)),this,SLOT(rotateSlot(qreal)));
+
 
     }
     m_currentLabel = NULL;
 
     m_angle = 0;
 
+    zoom_timer = new QTimer(this);
 
 }
 
@@ -83,68 +88,150 @@ RandomView::~RandomView()
 	delete ui;
 }
 
+void RandomView::touch2Slot()
+{
+    m_touch = true;
+}
+
+void RandomView::touch1Slot()
+{
+    m_touch = false;
+}
+
+void RandomView::rotateSlot(qreal angle)
+{
+    AppEnv::currentImg = m_currentLabel->getImgPath();
 
 
-bool RandomView::event( QEvent * event )
+    QImage image(AppEnv::currentImg);
+    if (image.isNull()) {
+        QMessageBox::information(this, tr("Image Viewer"),
+                     tr("Cannot load %1.").arg(AppEnv::currentImg));
+        return;
+    }
+    int w,h;
+    w = 270 * m_currentLabel->m_scaled;
+    h = 197 * m_currentLabel->m_scaled;
+    QMatrix matrix;
+    matrix.rotate(m_currentLabel->m_angle);
+
+    m_currentImgPixmap = QPixmap::fromImage(image).scaled(w, h);
+    m_currentImgPixmap = m_currentImgPixmap.transformed(matrix);
+
+
+    m_currentLabel->setPixmap( m_currentImgPixmap); //Qt::KeepAspectRatio
+
+    int lw = qSqrt(w*w+h*h);
+    m_currentLabel->resize( lw, lw);
+
+}
+
+void RandomView::zoomSlot(qreal tmp)
 {
 
+    AppEnv::currentImg = m_currentLabel->getImgPath();
+
+
+    QImage image(AppEnv::currentImg);
+    if (image.isNull()) {
+        QMessageBox::information(this, tr("Image Viewer"),
+                     tr("Cannot load %1.").arg(AppEnv::currentImg));
+        return;
+    }
+    int w,h;
+    w = 270 * tmp;
+    h = 197 * tmp;
+    QMatrix matrix;
+    matrix.rotate(m_currentLabel->m_angle);
+
+    m_currentImgPixmap = QPixmap::fromImage(image).scaled(w, h);
+    m_currentImgPixmap = m_currentImgPixmap.transformed(matrix);
+
+
+    m_currentLabel->setPixmap( m_currentImgPixmap); //Qt::KeepAspectRatio
+
+    int lw = qSqrt(w*w+h*h);
+    m_currentLabel->resize( lw, lw);
+
+
+}
+bool RandomView::event( QEvent * event )
+{
 
     switch (event->type()) {
     case QEvent::TouchBegin:
     case QEvent::TouchUpdate:
     case QEvent::TouchEnd:
     {
-        qDebug() <<"touch";
+
+
+
+
 
         //zoom+-
+
         QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
         QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
         if (touchPoints.count() == 2) {
+
+
             // determine scale factor
             const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
             const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
-
-
-            qDebug() <<" QLineF(touchPoint0.pos(), touchPoint1.pos()).length()" <<  QLineF(touchPoint0.pos(), touchPoint1.pos()).length()
-                    << "QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length()" << QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
-
-
-
             qreal currentScaleFactor =
                     QLineF(touchPoint0.pos(), touchPoint1.pos()).length()
                     / QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
-
-
-
             if (touchEvent->touchPointStates() & Qt::TouchPointReleased) {
                 // if one of the fingers is released, remember the current scale
                 // factor so that adding another finger later will continue zooming
                 // by adding new scale factor to the existing remembered value.
                 totalScaleFactor *= currentScaleFactor;
                 currentScaleFactor = 1;
+
+
             }
 
             qreal tmp =  totalScaleFactor * currentScaleFactor;
-            if(tmp > 2)
-            {
-                tmp = 1.5;
-
-            }
 
             if(qAbs(tmp - m_scaled) > 0.12){
 
+
+
+                AppEnv::currentImg = m_currentLabel->getImgPath();
+
+
+                QImage image(AppEnv::currentImg);
+                if (image.isNull()) {
+                    QMessageBox::information(this, tr("Image Viewer"),
+                                 tr("Cannot load %1.").arg(AppEnv::currentImg));
+                    return QWidget::event(event);
+                }
+
+
+
+                int w,h;
+                w = 270 * tmp;
+                h = 197 * tmp;
                 QMatrix matrix;
                 matrix.rotate(m_currentLabel->m_angle);
-                m_currentImgPixmap = m_currentImgPixmap.transformed(matrix);
-                m_currentLabel->setPixmap(m_currentImgPixmap.scaled(m_currentLabel->m_width*tmp, m_currentLabel->m_heigh * tmp)); //Qt::KeepAspectRatio
 
+
+                m_currentImgPixmap = QPixmap::fromImage(image).scaled(w, h);
+                m_currentImgPixmap = m_currentImgPixmap.transformed(matrix);
+
+
+
+                m_currentLabel->setPixmap( m_currentImgPixmap); //Qt::KeepAspectRatio
+
+                int lw = qSqrt(w*w+h*h);
+                m_currentLabel->resize( lw, lw);
                 m_scaled = tmp;
             }
             //zoom+- end
 
         }
-        QWidget::event(event);
-        return true;
+        return QWidget::event(event);
+
     }
     default:
         break;
@@ -159,9 +246,10 @@ void RandomView::imgReleaseSlot()
 
 void RandomView::imgClickSlot()
 {
-    qDebug();
+
 
     int w,h;
+
 
 
     w = 290 * 2;
@@ -171,51 +259,33 @@ void RandomView::imgClickSlot()
 
     AppEnv::currentImg = m_currentLabel->getImgPath();
 
-
-    QImage image(AppEnv::currentImg);
-    if (image.isNull()) {
-        QMessageBox::information(this, tr("Image Viewer"),
-                     tr("Cannot load %1.").arg(AppEnv::currentImg));
-        return;
-    }
-
-    QMatrix matrix;
-    matrix.rotate(m_currentLabel->m_angle);
-    m_currentImgPixmap = QPixmap::fromImage(image).scaled(m_currentLabel->m_width, m_currentLabel->m_heigh);
-    m_currentImgPixmap = m_currentImgPixmap.transformed(matrix);
-
-    m_currentLabel->setPixmap( m_currentImgPixmap);
-
-
-    qDebug();
 }
 
 void RandomView::mousePressEvent ( QMouseEvent * event )
 {
-    qDebug();
-    if (m_currentLabel != NULL){
-        m_mousePos =  event->globalPos() -m_currentLabel->geometry().topLeft();
 
-    }
-    qDebug();
+        if (m_currentLabel != NULL){
+            m_mousePos =  event->globalPos() -m_currentLabel->geometry().topLeft();
+        }
+
+    QWidget::mousePressEvent(event);
 }
 
 
 void RandomView::mouseMoveEvent ( QMouseEvent * event )
 {
-  //  qDebug();
 
-    m_currentLabel->move(event->globalPos() - m_mousePos);
+    if (m_touch == false){
+
+        m_currentLabel->move(event->globalPos() - m_mousePos);
+    }
+    QWidget::mouseMoveEvent(event);
 
 }
 void RandomView::mouseReleaseEvent ( QMouseEvent * event )
 {
-    qDebug();
-
-
 
 }
-
 
 
 void RandomView::wheelEvent(QWheelEvent *event)
@@ -234,8 +304,8 @@ void RandomView::wheelEvent(QWheelEvent *event)
         break;
     }
 
-    int w = m_currentLabel->m_width;
-    int h = m_currentLabel->m_heigh;
+    int w = m_currentLabel->m_width * m_currentLabel->m_scaled;
+    int h = m_currentLabel->m_heigh * m_currentLabel->m_scaled;
 
     if(event->delta()>0)
 {
@@ -261,10 +331,11 @@ void RandomView::wheelEvent(QWheelEvent *event)
         m_currentImgPixmap = m_currentImgPixmap.transformed(matrix);
         m_currentLabel->setPixmap(m_currentImgPixmap);
 
-        m_currentLabel->setPixmap( m_currentImgPixmap );
-        m_currentLabel->resize(w+100,h+100);
-        m_currentLabel->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
-        qDebug();
+
+        int lw = qSqrt(w*w+h*h);
+        m_currentLabel->resize( lw, lw);
+
+
 
  }
     else
@@ -288,10 +359,10 @@ void RandomView::wheelEvent(QWheelEvent *event)
         m_currentImgPixmap = m_currentImgPixmap.transformed(matrix);
         m_currentLabel->setPixmap(m_currentImgPixmap);
 
-        m_currentLabel->setPixmap( m_currentImgPixmap );
-        m_currentLabel->resize(w+100,h+100);
-        m_currentLabel->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
-        qDebug();
+
+        int lw = qSqrt(w*w+h*h);
+        m_currentLabel->resize( lw, lw);
+
 
     }
 

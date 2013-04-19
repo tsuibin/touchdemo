@@ -12,12 +12,12 @@ QWidget(parent), ui(new Ui::TopMenu)
 	ui->label->setPixmap(QPixmap(picPath));
 
 
-	QString editPicPath = "images/edit.png";
-    ImgLabel *label_edit = new ImgLabel(this);
-    label_edit->move(1212, 0);
-    label_edit->setPixmap(QPixmap(editPicPath));
-    label_edit->m_activeImg = "images/edit_active.jpg";
-    label_edit->m_normalImg = "images/edit.png";
+//	QString editPicPath = "images/edit.png";
+//    ImgLabel *label_edit = new ImgLabel(this);
+//    label_edit->move(1212, 0);
+//    label_edit->setPixmap(QPixmap(editPicPath));
+//    label_edit->m_activeImg = "images/edit_active.jpg";
+//    label_edit->m_normalImg = "images/edit.png";
 
 
 //    QString createPicPath = "images/create.png";
@@ -29,7 +29,7 @@ QWidget(parent), ui(new Ui::TopMenu)
 
     QString randomPicPath = "images/random.png";
     ImgLabel *label_random = new ImgLabel(this);
-    label_random->move(1144, 0);
+    label_random->move(1212, 0);
     label_random->setPixmap(QPixmap(randomPicPath));
     label_random->m_activeImg = "images/random_active.png";
     label_random->m_normalImg = "images/random.png";
@@ -38,7 +38,7 @@ QWidget(parent), ui(new Ui::TopMenu)
 
     QString gridPicPath = "images/grid.png";
     ImgLabel *label_grid = new ImgLabel(this);
-    label_grid->move(1144, 0);
+    label_grid->move(1212, 0);
     label_grid->setPixmap(QPixmap(gridPicPath));
     label_grid->m_activeImg = "images/grid_active.png";
     label_grid->m_normalImg = "images/grid.png";
@@ -48,7 +48,7 @@ QWidget(parent), ui(new Ui::TopMenu)
 
 	QString retPicPath = "images/ret.png";
 	ImgLabel *label_ret = new ImgLabel(this);
-	label_ret->move(1076, 0);
+    label_ret->move(1144, 0);
 	label_ret->setPixmap(QPixmap(retPicPath));
 	label_ret->m_activeImg = "images/ret_active.png";
 	label_ret->m_normalImg = "images/ret.png";
